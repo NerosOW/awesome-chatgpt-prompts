@@ -18,13 +18,13 @@ jobs:
         python -m pip install csvkit
 
     - name: Lint CSV files
-      run: find . -name "*.csv" -exec csvclean -n -u 2 {} +
+      run: find . -name "*.csv" -exec csvclean --length-mismatch --empty-columns -u 2 {} +
       env:
         CI: true
     - name: Check for errors
       if: always()
       run: |
-        if ! grep -q "No errors." <(find . -name "*.csv" -exec csvclean -n -u 2 {} + | grep -v "^$"); then
+        if ! grep -q "No errors." <(find . -name "*.csv" -exec csvclean --length-mismatch --empty-columns -u 2 {} + | grep -v "^$"); then
           echo "Errors were found in one or more CSV files."
           exit 1
         fi
